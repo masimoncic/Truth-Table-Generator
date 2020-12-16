@@ -1,21 +1,94 @@
-function aAndB(a,b) {
-    if(a && b) {
-        return true;
-    }
-    else{
-        return false;
+//Define html constants
+const htmlTHeadRowId = document.getElementById('htmlTHeadRowId');
+const htmlTBodyId = document.getElementById('htmlTBodyId');
+const htmlPropDivId = document.getElementById('htmlPropDivId');
+const htmlNewInputId = document.getElementById('htmlNewInputId');
+const htmlInputConclusionId = document.getElementById('htmlInputConclusionId');
+const htmlGenerateTableId = document.getElementById('htmlGenerateTableId');
+
+//define arrays to organize propositions
+let inputProps = [];
+let basicProps = [];
+let negationProps = [];
+let conjunctionProps = [];
+let disjunctionProps = [];
+let conditionalProps = [];
+let biconditionalProps = [];
+let complexPropHolder = [];
+let complexProps = [];
+let allProps = [];
+let numRows;
+
+//define event listner for 'Enter a proposition' button
+
+//htmlInputButtonCount used to track id of new inputs
+let htmlInputButtonCount = 1;
+//create new input for proposition
+function htmlNewInputFunction() {
+    let htmlInputVar = document.createElement('input')
+    htmlInputVar.type='text';
+    htmlInputVar.id=`htmlInput${htmlInputButtonCount +1}Id`;
+    htmlInputVar.name=`htmlInput${htmlInputButtonCount +1}Id`;
+    htmlInputVar.class ='inputProp'
+    htmlInputVar.value='';
+    let htmlInputVarLabel = document.createElement('label');
+    htmlInputVarLabel.for=`${htmlInputVar.id}`;
+    htmlInputVarLabel.class = 'inputPropLabel'
+    htmlInputVarLabel.innerHTML = 'Enter a proposition';
+    htmlInputButtonCount ++;
+    htmlBr1 = document.createElement('br');
+    htmlBr2 = document.createElement('br');
+    htmlPropDivId.appendChild(htmlInputVarLabel);
+    htmlPropDivId.appendChild(htmlInputVar);
+    htmlPropDivId.appendChild(htmlBr1);
+    htmlPropDivId.appendChild(htmlBr2);
+}
+
+//call htmlNewInputFunction to generate a new 'Enter a proposition' form whenever 'Add another proposition' is clicked
+htmlNewInputId.addEventListener('click', htmlNewInputFunction);
+
+
+function addInputsToArray(n) {
+    for (i=1; i<=n; i++) {
+        inputProps.push(document.getElementById(`htmlInput${i}Id`).value);
+        console.log(inputProps);
     }
 }
 
 
 
 
-let basicProps = ['a','b','c','d','e'];
-let complexProps = ['a&b', '(a&b)&c', '((a&b)&c)&d'];
-let allProps = basicProps.concat(complexProps);
-let numRows = Math.pow(2, basicProps.length);
 
-const htmlTHeadRow = document.getElementById('htmlTHeadRow');
+
+
+// test
+//htmlNewInputFunction();
+//addInputsToArray(htmlInputButtonCount);
+
+//placeholder functions
+
+
+
+function addBasicPropsToArray(n) {
+
+    for (i=0; i<inputProps.length; i++) {
+        basicProps.push(inputProps[i]);
+    }
+}
+
+
+//placeholder
+
+
+
+
+
+//let allProps = basicProps.concat(complexProps);
+//let numRows = Math.pow(2, basicProps.length);
+
+
+
+
 function createPropColumn(i) {
     let th = document.createElement('th');
     th.innerHTML = allProps[i]
@@ -29,12 +102,9 @@ function createAllPropColumns(n) {
     }
 }
 
-createAllPropColumns(length.allProps);
-const htmlTBody = document.getElementById('htmlTBody');
 
-function rowArrays(i) {
 
-}
+
 function createRows() {  
     for (i=1; i<= numRows; i++) {
         let row = document.createElement('tr');
@@ -44,7 +114,6 @@ function createRows() {
 
 }
 
-createRows();
 
 function getRow(rowNum) {
     return document.getElementById(`row${rowNum}`)
@@ -75,7 +144,6 @@ function fillAllBasicPropRows(n) {
     }
 }
 
-fillAllBasicPropRows(basicProps.length);
 
 function getTd(c, r) {
     return document.getElementById(`td${c}${r}`)
@@ -88,6 +156,19 @@ function evalConj(td1, td2) {
     }
 }
 
+function htmlGenerateTableListener () {
+    addInputsToArray(htmlInputButtonCount);
+    addBasicPropsToArray(inputProps.length);
+    numRows = Math.pow(2, basicProps.length);
+    //placeholder
+    allProps = basicProps;
+    createRows();
+    createAllPropColumns(basicProps.length);
+    fillAllBasicPropRows(basicProps.length);
+}
+
+htmlGenerateTableId.addEventListener('click', htmlGenerateTableListener);
+/*
 function fillRowsConj(c1, c2, c3) {
     for (i=1; i<=numRows; i++) {
             td1 = getTd(c1, i);
@@ -102,4 +183,4 @@ function fillRowsConj(c1, c2, c3) {
 }
 fillRowsConj(1,2,6); 
 fillRowsConj(6, 3, 7);
-fillRowsConj(7, 4, 8);
+fillRowsConj(7, 4, 8); */

@@ -1,12 +1,25 @@
 <!DOCTYPE html>
 <html>
     <head>
-
+        <link href='./ttStyle.css' rel='stylesheet' type='text/css'>
     </head>
 
     <body>
         <div>
-            placeholder for propositions
+            <p> Enter propositions as premises. <br>
+                Complex propositons are identified by ~(negation) &(conjunction) | (disjunction) ->(conditional) and == (biconditional).  <br>
+                Order of operation is assumed left to right unless parenthesis are added.
+                Basic propositons can be anything that does not include these character, but they must match exactly (use of single letters is recommended). <br>
+                If a conclusion is added (optional) then it will test and display the validity of the argument.</p>
+            <div id='htmlPropDivId' name='htmlPropDivId'>
+                    <label for='htmlInput1Id' class ='inputPropLabel'>Enter a proposition</label>
+                    <input type='text' id ='htmlInput1Id' name='htmlInput1Id' value='' class='inputProp'><br><br>
+            </div>
+            <input type='submit' id='htmlNewInputId' name='htmlNewInputId' value='Add another proposition'> <br>
+            <br>
+            <label for='htmlInputConclusionId'>Enter a conclusion</label>
+            <input type='htmlInputConclusionId' name='inputConclusionId' value=''><br>
+            <input type='submit' id='htmlGenerateTableId' name='htmlGenerateTableId' value='Generate Truth Table'><br>
         </div>
 
         <table id='htmlTable'>
