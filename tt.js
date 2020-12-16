@@ -14,10 +14,11 @@ let conjunctionProps = [];
 let disjunctionProps = [];
 let conditionalProps = [];
 let biconditionalProps = [];
-let complexPropHolder = [];
+let complexPropsHolder = [];
 let complexProps = [];
 let allProps = [];
 let numRows;
+let logicSyms = ['~','&','|','->','=='];
 
 //define event listner for 'Enter a proposition' button
 
@@ -55,38 +56,46 @@ function addInputsToArray(n) {
     }
 }
 
+//after calling addInputsToArray, all props will be in inputProps
+// We need to divide them into basic and complex props
 
 
 
+function checkLogicSyms (str, sym) {
+    if  (logicSyms.some(substring=>str.includes(substring))){
+        complexPropsHolder.push(str);
+    }
+    else {
+        basicProps.push(str);
+    }
+}
+
+//now all basic props are in basicProps, and complex props are in complexPropHolder
+//we want to break up complex props that have more than 1 logical symbol
 
 
+//start with just &
+function checkMultiConj (str) {
+    let strMod = str.replace('&', '')
+    if (!strMod.includes('&')) {
+        complexProps.push(str);
+    }
+}
 
-// test
-//htmlNewInputFunction();
-//addInputsToArray(htmlInputButtonCount);
-
-//placeholder functions
-
-
-
-function addBasicPropsToArray(n) {
-
-    for (i=0; i<inputProps.length; i++) {
-        basicProps.push(inputProps[i]);
+function checkMultiConjAll() {
+    for (i=0; i<complexPropsHolder.length; i++) {
+        checkMultiConj(complexPropsHolder[i]);
     }
 }
 
 
+function partitionProps() {
+    inputProps.forEach(element => checkLogicSyms(element));
+}
+
+
+
 //placeholder
-
-
-
-
-
-//let allProps = basicProps.concat(complexProps);
-//let numRows = Math.pow(2, basicProps.length);
-
-
 
 
 function createPropColumn(i) {
@@ -156,12 +165,20 @@ function evalConj(td1, td2) {
     }
 }
 
+
+
+
+
+
+
+//bottom of page
 function htmlGenerateTableListener () {
     addInputsToArray(htmlInputButtonCount);
-    addBasicPropsToArray(inputProps.length);
+    partitionProps();
+    checkMultiConjAll();
+    allProps = basicProps.concat(complexProps);
     numRows = Math.pow(2, basicProps.length);
     //placeholder
-    allProps = basicProps;
     createRows();
     createAllPropColumns(basicProps.length);
     fillAllBasicPropRows(basicProps.length);
