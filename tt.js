@@ -14,8 +14,9 @@ let conjunctionProps = [];
 let disjunctionProps = [];
 let conditionalProps = [];
 let biconditionalProps = [];
-let complexPropsHolder = [];
 let complexProps = [];
+let complexPropsHolder = [];
+let complexPropsColumns = [];
 let allProps = [];
 let numRows;
 let logicSyms = ['~','&','|','->','=='];
@@ -75,10 +76,33 @@ function checkLogicSyms (str, sym) {
 
 
 //start with just &
+
+
+function partitionProps() {
+    inputProps.forEach(element => checkLogicSyms(element));
+}
+
+
 function checkMultiConj (str) {
+    console.log(str);
+    if (!complexProps.includes(str)) {
     let strMod = str.replace('&', '')
-    if (!strMod.includes('&')) {
-        complexProps.push(str);
+        if (!strMod.includes('&')) {
+            complexProps.push(str);
+            conjunctionProps.push(str);
+        }
+        else {  
+            let strSlice1 = str.slice(0,3);
+            let strSlice2 = str.slice(2);
+            if (!complexProps.includes(strSlice1)) {
+                complexProps.push(str.slice(0,3));
+            }
+            if (!complexPropsHolder.includes(strSlice2)) {
+                complexPropsHolder.push(str.slice(2));
+            }
+        }
+        console.log(complexProps);
+        console.log(complexPropsHolder);
     }
 }
 
@@ -88,10 +112,28 @@ function checkMultiConjAll() {
     }
 }
 
-
-function partitionProps() {
-    inputProps.forEach(element => checkLogicSyms(element));
+function createComplexPropsColumnsConj() {
+    for (i=0; i<complexPropsHolder.length; i++) {
+        if (!complexProps.includes(complexPropsHolder[i])) {
+            complexPropsColumns.push(complexPropsHolder[i]);
+        }
+    }
+    complexPropsColumns.sort(function (a,b) { return (a.length - b.length)});
 }
+    
+function getAllBasicPropsConj () {
+    for (i=0; i<complexProps.length; i++) {
+        let s0 = complexProps[i][0];
+        let s2 =complexProps[i][2];
+        if (!basicProps.includes(s0)) {
+            basicProps.push(s0);
+        }
+        if (!basicProps.includes(s2)) {
+            basicProps.push(s2);
+        }
+    }
+}
+
 
 
 
@@ -105,7 +147,7 @@ function createPropColumn(i) {
     htmlTHeadRow.appendChild(th);
 }
 
-function createAllPropColumns(n) {
+function createAllPropColumns() {
     for (i=0; i<allProps.length; i++) {
         createPropColumn(i);
     }
@@ -171,17 +213,21 @@ function evalConj(td1, td2) {
 
 
 
+
 //bottom of page
 function htmlGenerateTableListener () {
     addInputsToArray(htmlInputButtonCount);
     partitionProps();
     checkMultiConjAll();
-    allProps = basicProps.concat(complexProps);
+    getAllBasicPropsConj();
+    createComplexPropsColumnsConj()
+    allProps = basicProps.concat(complexProps, complexPropsColumns);
     numRows = Math.pow(2, basicProps.length);
     //placeholder
     createRows();
-    createAllPropColumns(basicProps.length);
+    createAllPropColumns(allProps.length);
     fillAllBasicPropRows(basicProps.length);
+    
 }
 
 htmlGenerateTableId.addEventListener('click', htmlGenerateTableListener);
