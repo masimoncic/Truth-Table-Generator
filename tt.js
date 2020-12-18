@@ -209,6 +209,46 @@ function evalConj(td1, td2) {
 
 
 
+function fillComplexRows () {
+    for (i=0; i<allProps.length; i++) {
+        //here will need to code an else if for every symbol
+        if (allProps[i][1] === '&') {
+            //temp gets the first character of the proposition, and p1Col gives its column (which will be used to find the table element by id)
+            let temp1 = allProps[i][0];
+            let p1Col = allProps.indexOf(temp1) +1;
+            //temp 2 gives the rest of the string after the & symbol.  p2Col gives its column.
+            let temp2 = allProps[i].slice(2);
+            let p2Col = allProps.indexOf(temp2) + 1;
+            for (j=1; j< numRows +1; j++) {
+                td1 = getTd(p1Col, j);
+                td2 = getTd(p2Col, j);
+                td = document.createElement('td');
+                tdVal = evalConj(td1, td2);
+                td.innerHTML = tdVal;
+                td.id = `td${i+1}${j}`
+                getRow(j).appendChild(td);
+            }
+
+        }
+    }
+}
+
+/*
+function fillRowsConj(c1, c2, c3) {
+    for (i=1; i<=numRows; i++) {
+            td1 = getTd(c1, i);
+            td2 = getTd(c2, i);
+            td = document.createElement('td');
+            tdVal = evalConj(td1, td2);
+            td.innerHTML = tdVal;
+            td.id = `td${c3}${i}`;
+            getRow(i).appendChild(td);
+
+        }
+}
+*/
+
+
 
 
 
@@ -227,23 +267,9 @@ function htmlGenerateTableListener () {
     createRows();
     createAllPropColumns(allProps.length);
     fillAllBasicPropRows(basicProps.length);
+    fillComplexRows();
     
 }
 
 htmlGenerateTableId.addEventListener('click', htmlGenerateTableListener);
-/*
-function fillRowsConj(c1, c2, c3) {
-    for (i=1; i<=numRows; i++) {
-            td1 = getTd(c1, i);
-            td2 = getTd(c2, i);
-            td = document.createElement('td');
-            tdVal = evalConj(td1, td2);
-            td.innerHTML = tdVal;
-            td.id = `td${c3}${i}`;
-            getRow(i).appendChild(td);
 
-        }
-}
-fillRowsConj(1,2,6); 
-fillRowsConj(6, 3, 7);
-fillRowsConj(7, 4, 8); */
